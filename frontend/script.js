@@ -12,7 +12,7 @@ document.getElementById('set-limit').addEventListener('click', async function() 
     }
 
     try {
-        const response = await fetch('http://localhost:5000/api/set_limit', {
+        const response = await fetch('http://127.0.0.1:5000/api/set_limit', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -49,7 +49,7 @@ document.getElementById('test-api').addEventListener('click', async function() {
     const username = document.getElementById('username').value;
 
     try {
-        const response = await fetch(`http://localhost:5000/api/resource?user_id=${encodeURIComponent(username)}`);
+        const response = await fetch(`http://127.0.0.1:5000/api/resource?user_id=${encodeURIComponent(username)}`);
 
         const result = await response.json();
         if (response.ok) {
