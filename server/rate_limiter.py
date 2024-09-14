@@ -8,12 +8,14 @@ class SimpleRateLimiter:
         self.limit = 5  # max requests per interval
         self.interval = 60  # interval (in sec)
     
+    def request_user_present(self, user_id):
+        return (user_id in self.request_times)
 
     def set_limit(self, user_id, limit, period):
         self.limit = limit
         self.interval = period
 
-        if user_id not in self.request_times:
+        if not self.request_user_present(user_id):
             self.request_times[user_id] = deque()
 
 
@@ -21,13 +23,16 @@ class SimpleRateLimiter:
         current_time = int(time.time())
 
         timestamps = self.request_times[user_id]
-
-        while len(timestamps) and current_time - timestamps[0] > self.interval:
-            print(f"{current_time, timestamps[0]}")
+        
+        curr_time_diff = 0
+        if len(timestamps):
+            curr_time_diff = current_time - timestamps[0]
+        
+        while len(timestamps) and curr_time_diff > self.interval:
             timestamps.popleft()
 
         if len(timestamps) >= self.limit:
-            return False
+            return False, self.interval - curr_time_diff
         
         timestamps.append(current_time)
-        return True
+        return True, self.interval - curr_time_diff
