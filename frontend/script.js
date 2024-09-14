@@ -54,15 +54,13 @@ document.getElementById('test-api').addEventListener('click', async function() {
             document.getElementById('message').className = 'success';
         } else {
             // Check if the response contains time remaining for the next request
-            rateLimitExceededMsg = `Rate limit exceeded for user: ${result.user_id}! Try again in ${result.time_remaining} seconds.`;
-
             if (result.time_remaining) {
                 startCountdown(result.time_remaining, result.user_id);
-                document.getElementById('message').textContent = rateLimitExceededMsg
+                document.getElementById('message').textContent = `Rate limit exceeded for user: ${result.user_id}! Try again in ${result.time_remaining} seconds.`;
                 document.getElementById('message').className = 'error';
             } else {
                 clearInterval(countdownInterval);
-                document.getElementById('message').textContent = rateLimitExceededMsg;
+                document.getElementById('message').textContent = result.message;
                 document.getElementById('message').className = 'error';
             }
         }
